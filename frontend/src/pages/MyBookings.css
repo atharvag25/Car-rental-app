@@ -1,0 +1,112 @@
+.my-bookings {
+  min-height: calc(100vh - 60px);
+  padding: 40px 0;
+}
+
+.my-bookings h1 {
+  margin-bottom: 30px;
+  color: #2c3e50;
+}
+
+.no-bookings {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 18px;
+  color: #7f8c8d;
+}
+
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.booking-card {
+  background: white;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: grid;
+  grid-template-columns: 300px 1fr auto;
+  gap: 30px;
+  align-items: center;
+}
+
+.booking-car-info {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.booking-car-info img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.booking-car-info h3 {
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.car-category {
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.booking-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.detail-row .label {
+  font-weight: 500;
+  color: #555;
+}
+
+.detail-row .price {
+  color: #27ae60;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmed {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+@media (max-width: 768px) {
+  .booking-card {
+    grid-template-columns: 1fr;
+  }
+}

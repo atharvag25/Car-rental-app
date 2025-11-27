@@ -1,0 +1,111 @@
+.navbar {
+  background-color: #ffffff;
+  padding: 0.8rem 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  color: #ff6b35;
+  font-size: 28px;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-item {
+  margin: 0;
+}
+
+.nav-link {
+  color: #2d3436;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.3s;
+  padding: 8px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover {
+  color: #ff6b35;
+  border-bottom: 2px solid #ff6b35;
+}
+
+.nav-user {
+  color: #2d3436;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.navbar .btn {
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.navbar .btn-primary {
+  background-color: transparent;
+  color: #ff6b35;
+  border: 2px solid #ff6b35;
+}
+
+.navbar .btn-primary:hover {
+  background-color: #ff6b35;
+  color: white;
+}
+
+.navbar .btn-success {
+  background-color: #ff6b35;
+  color: white;
+  border: 2px solid #ff6b35;
+}
+
+.navbar .btn-success:hover {
+  background-color: #e55a2b;
+}
+
+.navbar .btn-secondary {
+  background-color: transparent;
+  color: #636e72;
+  border: 2px solid #dfe6e9;
+}
+
+.navbar .btn-secondary:hover {
+  background-color: #f5f6fa;
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
+  }
+
+  .nav-menu {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+}
