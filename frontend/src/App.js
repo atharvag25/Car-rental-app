@@ -8,7 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import MyBookings from './pages/MyBookings';
 import AdminDashboard from './pages/AdminDashboard';
-import TestBackend from './pages/TestBackend';
+import AdminTest from './pages/AdminTest';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -33,7 +33,7 @@ function App() {
                 <AdminDashboard />
               </ProtectedRoute>
             } />
-            <Route path="/test-backend" element={<TestBackend />} />
+            <Route path="/admin-test" element={<AdminTest />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>

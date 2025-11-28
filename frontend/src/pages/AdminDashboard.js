@@ -5,382 +5,307 @@ import './AdminDashboard.css';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('cars');
-  const [cars, setCars] = useState([]);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [users, setUsers] = useState([]);
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [showCarForm, setShowCarForm] = useState(false);
-  const [editingCar, setEditingCar] = useState(null);
-  const [carForm, setCarForm] = useState({
-    brand: '',
-    model: '',
-    year: new Date().getFullYear(),
-    category: 'sedan',
-    pricePerDay: '',
-    imageUrl: '',
-    description: '',
-    isAvailable: true
-  });
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (activeTab === 'cars') {
-      fetchCars();
-    } else {
-      fetchBookings();
-    }
+    fetchDashboardData();
+    if (activeTab === 'users') fetchUsers();
+    if (activeTab === 'bookings') fetchBookings();
+    if (activeTab === 'cars') fetchCars();
   }, [activeTab]);
 
-  const fetchCars = async () => {
-    setLoading(true);
+  const fetchDashboardData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/cars`);
-      setCars(response.data);
-    } catch (error) {
-      console.error('Error fetching cars:', error);
-    } finally {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/admin/dashboard`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log('Dashboard data:', response.data);
+      setDashboardData(response.data);
       setLoading(false);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      setLoading(false);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/admin/users`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
     }
   };
 
   const fetchBookings = async () => {
-    setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/bookings/all`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/bookings/all`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log('Bookings data:', response.data);
       setBookings(response.data);
     } catch (error) {
       console.error('Error fetching bookings:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
-  const handleCarFormChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setCarForm(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleCarSubmit = async (e) => {
-    e.preventDefault();
+  const fetchCars = async () => {
     try {
-      if (editingCar) {
-        await axios.put(`${API_URL}/cars/${editingCar._id}`, carForm);
-      } else {
-        await axios.post(`${API_URL}/cars`, carForm);
-      }
-      setShowCarForm(false);
-      setEditingCar(null);
-      resetCarForm();
-      fetchCars();
+      const response = await axios.get(`${API_URL}/cars`);
+      console.log('Cars data:', response.data);
+      console.log('First car object:', response.data[0]);
+      setCars(response.data);
     } catch (error) {
-      alert(error.response?.data?.message || 'Failed to save car');
+      console.error('Error fetching cars:', error);
     }
   };
 
-  const resetCarForm = () => {
-    setCarForm({
-      brand: '',
-      model: '',
-      year: new Date().getFullYear(),
-      category: 'sedan',
-      pricePerDay: '',
-      imageUrl: '',
-      description: '',
-      isAvailable: true
-    });
-  };
-
-  const handleEditCar = (car) => {
-    setEditingCar(car);
-    setCarForm(car);
-    setShowCarForm(true);
-  };
-
-  const handleDeleteCar = async (carId) => {
-    if (!window.confirm('Are you sure you want to delete this car?')) return;
-    
+  const updateBookingStatus = async (bookingId, status) => {
     try {
-      await axios.delete(`${API_URL}/cars/${carId}`);
-      fetchCars();
-    } catch (error) {
-      alert(error.response?.data?.message || 'Failed to delete car');
-    }
-  };
-
-  const handleUpdateBookingStatus = async (bookingId, status) => {
-    try {
-      await axios.patch(`${API_URL}/bookings/${bookingId}/status`, { status });
+      const token = localStorage.getItem('token');
+      await axios.patch(`${API_URL}/bookings/${bookingId}/status`, 
+        { status },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       fetchBookings();
     } catch (error) {
-      alert(error.response?.data?.message || 'Failed to update booking');
+      console.error('Error updating booking status:', error);
     }
   };
+
+  if (loading) return <div className="loading">Loading admin dashboard...</div>;
 
   return (
     <div className="admin-dashboard">
-      <div className="container">
-        <h1>Admin Dashboard</h1>
-        
-        <div className="tabs">
-          <button 
-            className={activeTab === 'cars' ? 'active' : ''} 
-            onClick={() => setActiveTab('cars')}
-          >
-            Manage Cars
-          </button>
-          <button 
-            className={activeTab === 'bookings' ? 'active' : ''} 
-            onClick={() => setActiveTab('bookings')}
-          >
-            Manage Bookings
-          </button>
-        </div>
-
-        {activeTab === 'cars' && (
-          <div className="cars-section">
-            <div className="section-header">
-              <h2>Car Inventory</h2>
-              <button 
-                className="btn btn-success" 
-                onClick={() => {
-                  setShowCarForm(true);
-                  setEditingCar(null);
-                  resetCarForm();
-                }}
-              >
-                Add New Car
-              </button>
-            </div>
-
-            {showCarForm && (
-              <div className="car-form-modal">
-                <div className="modal-content">
-                  <h3>{editingCar ? 'Edit Car' : 'Add New Car'}</h3>
-                  <form onSubmit={handleCarSubmit}>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Brand</label>
-                        <input
-                          type="text"
-                          name="brand"
-                          value={carForm.brand}
-                          onChange={handleCarFormChange}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Model</label>
-                        <input
-                          type="text"
-                          name="model"
-                          value={carForm.model}
-                          onChange={handleCarFormChange}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Year</label>
-                        <input
-                          type="number"
-                          name="year"
-                          value={carForm.year}
-                          onChange={handleCarFormChange}
-                          min="1900"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Category</label>
-                        <select
-                          name="category"
-                          value={carForm.category}
-                          onChange={handleCarFormChange}
-                          required
-                        >
-                          <option value="sedan">Sedan</option>
-                          <option value="suv">SUV</option>
-                          <option value="sports">Sports</option>
-                          <option value="hatchback">Hatchback</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Price Per Day ($)</label>
-                      <input
-                        type="number"
-                        name="pricePerDay"
-                        value={carForm.pricePerDay}
-                        onChange={handleCarFormChange}
-                        min="0"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Image URL</label>
-                      <input
-                        type="url"
-                        name="imageUrl"
-                        value={carForm.imageUrl}
-                        onChange={handleCarFormChange}
-                        placeholder="https://example.com/car-image.jpg"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Description</label>
-                      <textarea
-                        name="description"
-                        value={carForm.description}
-                        onChange={handleCarFormChange}
-                        rows="4"
-                      />
-                    </div>
-                    <div className="form-group checkbox-group">
-                      <label>
-                        <input
-                          type="checkbox"
-                          name="isAvailable"
-                          checked={carForm.isAvailable}
-                          onChange={handleCarFormChange}
-                        />
-                        Available for Rent
-                      </label>
-                    </div>
-                    <div className="form-actions">
-                      <button type="submit" className="btn btn-success">
-                        {editingCar ? 'Update Car' : 'Add Car'}
-                      </button>
-                      <button 
-                        type="button" 
-                        className="btn btn-secondary" 
-                        onClick={() => {
-                          setShowCarForm(false);
-                          setEditingCar(null);
-                          resetCarForm();
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            )}
-
-            {loading ? (
-              <div className="loading">Loading cars...</div>
-            ) : (
-              <div className="cars-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Image</th>
-                      <th>Brand</th>
-                      <th>Model</th>
-                      <th>Year</th>
-                      <th>Category</th>
-                      <th>Price/Day</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cars.map(car => (
-                      <tr key={car._id}>
-                        <td>
-                          <img src={car.imageUrl} alt={car.brand} className="table-car-img" />
-                        </td>
-                        <td>{car.brand}</td>
-                        <td>{car.model}</td>
-                        <td>{car.year}</td>
-                        <td>{car.category}</td>
-                        <td>${car.pricePerDay}</td>
-                        <td>
-                          <span className={car.isAvailable ? 'status-available' : 'status-unavailable'}>
-                            {car.isAvailable ? 'Available' : 'Unavailable'}
-                          </span>
-                        </td>
-                        <td>
-                          <button 
-                            className="btn-small btn-primary" 
-                            onClick={() => handleEditCar(car)}
-                          >
-                            Edit
-                          </button>
-                          <button 
-                            className="btn-small btn-danger" 
-                            onClick={() => handleDeleteCar(car._id)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'bookings' && (
-          <div className="bookings-section">
-            <h2>All Bookings</h2>
-            {loading ? (
-              <div className="loading">Loading bookings...</div>
-            ) : (
-              <div className="bookings-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Customer</th>
-                      <th>Car</th>
-                      <th>Pickup Date</th>
-                      <th>Return Date</th>
-                      <th>Days</th>
-                      <th>Total Price</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {bookings.map(booking => (
-                      <tr key={booking._id}>
-                        <td>{booking.userId?.name}</td>
-                        <td>{booking.carId?.brand} {booking.carId?.model}</td>
-                        <td>{new Date(booking.pickupDate).toLocaleDateString()}</td>
-                        <td>{new Date(booking.returnDate).toLocaleDateString()}</td>
-                        <td>{booking.totalDays}</td>
-                        <td>${booking.totalPrice}</td>
-                        <td>
-                          <span className={`status status-${booking.status}`}>
-                            {booking.status}
-                          </span>
-                        </td>
-                        <td>
-                          <select
-                            value={booking.status}
-                            onChange={(e) => handleUpdateBookingStatus(booking._id, e.target.value)}
-                            className="status-select"
-                          >
-                            <option value="pending">Pending</option>
-                            <option value="confirmed">Confirmed</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
-                          </select>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
+      <h1>Admin Dashboard</h1>
+      
+      <div className="admin-tabs">
+        <button 
+          className={activeTab === 'overview' ? 'active' : ''}
+          onClick={() => setActiveTab('overview')}
+        >
+          Overview
+        </button>
+        <button 
+          className={activeTab === 'users' ? 'active' : ''}
+          onClick={() => setActiveTab('users')}
+        >
+          Users
+        </button>
+        <button 
+          className={activeTab === 'bookings' ? 'active' : ''}
+          onClick={() => setActiveTab('bookings')}
+        >
+          Bookings
+        </button>
+        <button 
+          className={activeTab === 'cars' ? 'active' : ''}
+          onClick={() => setActiveTab('cars')}
+        >
+          Cars
+        </button>
       </div>
+
+      {activeTab === 'overview' && dashboardData && (
+        <div className="overview-tab">
+          <div className="stats-grid">
+            <div className="stat-card">
+              <h3>Total Users</h3>
+              <p className="stat-number">{dashboardData.stats.totalUsers}</p>
+            </div>
+            <div className="stat-card">
+              <h3>Total Cars</h3>
+              <p className="stat-number">{dashboardData.stats.totalCars}</p>
+            </div>
+            <div className="stat-card">
+              <h3>Total Bookings</h3>
+              <p className="stat-number">{dashboardData.stats.totalBookings}</p>
+            </div>
+            <div className="stat-card">
+              <h3>Active Bookings</h3>
+              <p className="stat-number">{dashboardData.stats.activeBookings}</p>
+            </div>
+            <div className="stat-card">
+              <h3>Total Revenue</h3>
+              <p className="stat-number">${dashboardData.stats.totalRevenue}</p>
+            </div>
+          </div>
+
+          <div className="recent-bookings">
+            <h3>Recent Bookings</h3>
+            <div className="bookings-list">
+              {dashboardData.recentBookings.map(booking => (
+                <div key={booking._id} className="booking-item">
+                  <div>
+                    <strong>{booking.userId.name}</strong> - {booking.carId.brand} {booking.carId.model}
+                  </div>
+                  <div className={`status ${booking.status}`}>
+                    {booking.status}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'users' && (
+        <div className="users-tab">
+          <h3>User Management ({users.length} users)</h3>
+          <div className="users-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map(user => (
+                  <tr key={user._id}>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{user.name}</td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{user.email}</td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{new Date(user.createdAt).toLocaleDateString()}</td>
+                    <td>
+                      <button className="btn-danger">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'bookings' && (
+        <div className="bookings-tab">
+          <h3>Booking Management ({bookings.length} bookings)</h3>
+          <div className="bookings-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Car</th>
+                  <th>Pickup Date</th>
+                  <th>Return Date</th>
+                  <th>Days</th>
+                  <th>Total Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookings && bookings.length > 0 ? bookings.map((booking, index) => {
+                  console.log(`Booking ${index}:`, booking);
+                  return (
+                  <tr key={booking._id || index}>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{booking.userId?.name || 'N/A'}</td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{booking.carId ? `${booking.carId.brand} ${booking.carId.model}` : 'N/A'}</td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>
+                      {booking.pickupDate ? new Date(booking.pickupDate).toLocaleDateString() : 'N/A'}
+                    </td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>
+                      {booking.returnDate ? new Date(booking.returnDate).toLocaleDateString() : 'N/A'}
+                    </td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{booking.totalDays || 'N/A'}</td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>${booking.totalPrice || 0}</td>
+                    <td className={`status ${booking.status}`}>
+                      {booking.status}
+                    </td>
+                    <td>
+                      <select 
+                        value={booking.status}
+                        onChange={(e) => updateBookingStatus(booking._id, e.target.value)}
+                        style={{color: '#000000', fontWeight: '600', fontSize: '12px'}}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </td>
+                  </tr>
+                  );
+                }) : (
+                  <tr>
+                    <td colSpan="8" style={{textAlign: 'center', padding: '20px', color: '#000000', fontWeight: '600'}}>
+                      No bookings found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'cars' && (
+        <div className="cars-tab">
+          <h3>Car Management ({cars.length} cars)</h3>
+          <div className="cars-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Brand</th>
+                  <th>Model</th>
+                  <th>Year</th>
+                  <th>Category</th>
+                  <th>Price/Day</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cars && cars.length > 0 ? cars.map((car, index) => {
+                  console.log(`Car ${index}:`, car);
+                  return (
+                  <tr key={car._id || index}>
+                    <td>
+                      <img 
+                        src={car.imageUrl || car.image || 'https://via.placeholder.com/60x40?text=Car'} 
+                        alt={`${car.brand || 'Car'} ${car.model || ''}`}
+                        style={{width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px'}}
+                      />
+                    </td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{car.brand || 'N/A'}</td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{car.model || 'N/A'}</td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{car.year || 'N/A'}</td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>{car.category || 'N/A'}</td>
+                    <td style={{color: '#000000', fontWeight: '700', fontSize: '14px'}}>${car.pricePerDay || 0}</td>
+                    <td className={`availability ${car.isAvailable ? 'available' : 'unavailable'}`} style={{color: car.isAvailable ? '#28a745' : '#dc3545', fontWeight: '600'}}>
+                      {car.isAvailable ? 'Available' : 'Unavailable'}
+                    </td>
+                    <td>
+                      <button className="btn-edit">Edit</button>
+                      <button className="btn-danger">Delete</button>
+                    </td>
+                  </tr>
+                  );
+                }) : (
+                  <tr>
+                    <td colSpan="8" style={{textAlign: 'center', padding: '20px'}}>
+                      No cars found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
