@@ -1,64 +1,176 @@
-.admin-dashboard {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+/* Force override of all global styles */
+html, body {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
 }
 
-
-.admin-dashboard table td,
-.admin-dashboard table th {
-  color: #000 !important;
-  font-weight: 600;
+.App {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
 }
 
-
-.admin-dashboard h1 {
-  color: #0b0b0b;
-  margin-bottom: 30px;
-  text-align: center;
+/* Reset and override global styles for admin dashboard */
+.admin-dashboard-container {
+  background: #1a1a1a !important;
+  min-height: 100vh !important;
+  color: #ffffff !important;
+  font-family: 'Arial', sans-serif !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 9999 !important;
+  overflow-y: auto !important;
 }
 
-.admin-dashboard h3 {
-  color: #333;
-  font-weight: 600;
-  margin-bottom: 20px;
+/* Override global App styles */
+.admin-dashboard-container * {
+  color: inherit !important;
 }
 
-.admin-tabs {
+/* Header Styles */
+.admin-header {
+  background: #000000;
+  padding: 15px 30px;
   display: flex;
-  gap: 10px;
-  margin-bottom: 30px;
-  border-bottom: 2px solid #eee;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #E31E24;
 }
 
-.admin-tabs button {
-  padding: 12px 24px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 16px;
-  color: #666;
-  border-bottom: 3px solid transparent;
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.car-icon {
+  font-size: 24px;
+  color: #E31E24;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.auto {
+  color: #E31E24;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.care {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-link {
+  color: #ffffff !important;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 4px;
   transition: all 0.3s ease;
 }
 
+.nav-link:hover,
+.nav-link.active {
+  background: #E31E24;
+  color: #ffffff !important;
+}
+
+.admin-greeting {
+  color: #ffffff !important;
+  font-size: 14px;
+}
+
+.logout-btn {
+  background: #E31E24;
+  color: #ffffff !important;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #C41A1F;
+}
+
+/* Main Content */
+.admin-content {
+  padding: 0;
+  background: #1a1a1a;
+  min-height: calc(100vh - 70px);
+}
+
+/* Tabs */
+.admin-tabs {
+  background: #2a2a2a;
+  display: flex;
+  border-bottom: 1px solid #444;
+  padding: 0;
+}
+
+.admin-tabs button {
+  background: none;
+  border: none;
+  color: #ffffff !important;
+  padding: 15px 25px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+}
+
 .admin-tabs button:hover {
-  color: #007bff;
+  background: #333;
 }
 
 .admin-tabs button.active {
-  color: #007bff;
-  border-bottom-color: #007bff;
+  background: #E31E24;
+  border-bottom-color: #E31E24;
 }
 
-.loading {
-  text-align: center;
-  padding: 50px;
-  font-size: 18px;
-  color: #666;
+/* Tab Content */
+.overview-tab,
+.users-tab,
+.bookings-tab,
+.cars-tab {
+  padding: 30px;
+  background: #1a1a1a;
 }
 
-/* Overview Tab */
+.overview-tab h3,
+.users-tab h3,
+.bookings-tab h3,
+.cars-tab h3 {
+  color: #ffffff !important;
+  font-size: 24px;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+/* Stats Grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -67,40 +179,39 @@
 }
 
 .stat-card {
-  background: white;
+  background: #2a2a2a;
   padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  border-left: 4px solid #E31E24;
   text-align: center;
-  border-left: 4px solid #007bff;
 }
 
 .stat-card h3 {
-  margin: 0 0 10px 0;
-  color: #666;
+  color: #cccccc !important;
   font-size: 14px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .stat-number {
+  color: #ffffff !important;
   font-size: 32px;
   font-weight: bold;
-  color: #333;
   margin: 0;
 }
 
+/* Recent Bookings */
 .recent-bookings {
-  background: white;
+  background: #2a2a2a;
   padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
 }
 
 .recent-bookings h3 {
+  color: #ffffff !important;
   margin-top: 0;
-  color: #333;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid #444;
   padding-bottom: 10px;
 }
 
@@ -115,43 +226,75 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border-left: 4px solid #007bff;
+  background: #333;
+  border-radius: 6px;
+  border-left: 4px solid #E31E24;
+}
+
+.booking-item div {
+  color: #ffffff !important;
+}
+
+.booking-item strong {
+  color: #ffffff !important;
 }
 
 /* Tables */
-.users-table, .bookings-table {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+.users-table,
+.bookings-table,
+.cars-table {
+  background: #2a2a2a;
+  border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-.users-table table, .bookings-table table {
+.users-table table,
+.bookings-table table,
+.cars-table table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.users-table th, .bookings-table th,
-.users-table td, .bookings-table td {
+.users-table th,
+.bookings-table th,
+.cars-table th {
+  background: #333;
+  color: #ffffff !important;
   padding: 15px;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.users-table th, .bookings-table th {
-  background: #f8f9fa;
-  font-weight: 700;
+.users-table td,
+.bookings-table td,
+.cars-table td {
+  padding: 15px;
+  border-bottom: 1px solid #444;
+  color: #ffffff !important;
+  font-size: 14px;
 }
 
-.users-table tr:hover, .bookings-table tr:hover {
-  background: #f8f9fa;
+.users-table tr:hover,
+.bookings-table tr:hover,
+.cars-table tr:hover {
+  background: #333;
+}
+
+/* Override inline styles */
+.users-table td,
+.bookings-table td,
+.cars-table td {
+  color: #ffffff !important;
+  font-weight: 500 !important;
 }
 
 /* Status badges */
 .status {
-  padding: 5px 12px;
+  padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
@@ -160,85 +303,129 @@
 }
 
 .status.pending {
-  background: #fff3cd;
-  color: #856404;
+  background: #FFA500;
+  color: #000000 !important;
 }
 
 .status.confirmed {
-  background: #d4edda;
-  color: #155724;
+  background: #28a745;
+  color: #ffffff !important;
 }
 
 .status.completed {
-  background: #d1ecf1;
-  color: #0c5460;
+  background: #17a2b8;
+  color: #ffffff !important;
 }
 
 .status.cancelled {
-  background: #f8d7da;
-  color: #721c24;
+  background: #dc3545;
+  color: #ffffff !important;
 }
 
 /* Buttons */
+.btn-edit,
 .btn-danger {
-  background: #dc3545;
-  color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
+  padding: 6px 12px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
-  transition: background 0.3s ease;
-  margin-left: 5px;
+  font-weight: 600;
+  margin-right: 5px;
+  transition: all 0.3s ease;
+}
+
+.btn-edit {
+  background: #E31E24;
+  color: #ffffff !important;
+}
+
+.btn-edit:hover {
+  background: #C41A1F;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: #ffffff !important;
 }
 
 .btn-danger:hover {
   background: #c82333;
 }
 
-.btn-edit {
-  background: #007bff;
-  color: white;
+.btn-primary {
+  background: #E31E24;
+  color: #ffffff !important;
   border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
+  padding: 10px 20px;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #C41A1F;
+}
+
+/* Car Images */
+.cars-table img {
+  width: 80px !important;
+  height: 60px !important;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 2px solid #444;
+}
+
+/* Select dropdowns */
+select {
+  background: #333 !important;
+  color: #ffffff !important;
+  border: 1px solid #555;
+  padding: 5px 10px;
+  border-radius: 4px;
   font-size: 12px;
-  transition: background 0.3s ease;
 }
 
-.btn-edit:hover {
-  background: #0056b3;
+select option {
+  background: #333 !important;
+  color: #ffffff !important;
 }
 
-/* Cars Table */
-.cars-table {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  overflow: hidden;
+/* Loading and Error States */
+.loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #ffffff !important;
+  background: #1a1a1a;
 }
 
-.cars-table table {
-  width: 100%;
-  border-collapse: collapse;
+.error-message {
+  text-align: center;
+  padding: 40px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  border-left: 4px solid #E31E24;
+  margin: 20px;
 }
 
-.cars-table th, .cars-table td {
-  padding: 15px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
+.error-message p {
+  color: #ffffff !important;
+  font-size: 16px;
+  margin-bottom: 15px;
 }
 
-.cars-table th {
-  background: #f8f9fa;
-  font-weight: 700;
+.error-message a {
+  color: #E31E24 !important;
+  text-decoration: none;
 }
 
-.cars-table tr:hover {
-  background: #f8f9fa;
+.error-message a:hover {
+  text-decoration: underline;
 }
 
+/* Availability Status */
 .availability.available {
   color: #28a745 !important;
   font-weight: 600;
@@ -249,91 +436,61 @@
   font-weight: 600;
 }
 
-/* Force dark color for all table text */
-.admin-dashboard table td {
-  color: #000000 !important;
-  font-weight: 600 !important;
-}
-
-.admin-dashboard table th {
-  color: #000000 !important;
-  font-weight: 700 !important;
-}
-
-/* Super aggressive overrides */
-.admin-dashboard .cars-table td,
-.admin-dashboard .users-table td,
-.admin-dashboard .bookings-table td {
-  color: #000000 !important;
-  font-weight: 600 !important;
-}
-
-.admin-dashboard .cars-table th,
-.admin-dashboard .users-table th,
-.admin-dashboard .bookings-table th {
-  color: #000000 !important;
-  font-weight: 700 !important;
-}
-
-/* Override any inherited text color */
-.admin-dashboard table * {
-  color: #000000 !important;
-}
-
-.admin-dashboard .cars-table tbody tr td {
-  color: #000000 !important;
-  font-weight: 600 !important;
-}
-
-/* Tab Content */
-.overview-tab, .users-tab, .bookings-tab, .cars-tab {
-  color: #0d0d0c;
-}
-
-.overview-tab h3, .users-tab h3, .bookings-tab h3, .cars-tab h3 {
-  color: #0d0d0c;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-/* Select dropdowns */
-select {
-  padding: 5px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  color: #0d0d0c;
-  font-size: 12px;
-}
-
-/* Booking item text */
-.booking-item {
-  color: #0d0d0c;
-}
-
-.booking-item strong {
-  color: #0d0d0c;
-}
-
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .admin-dashboard {
-    padding: 10px;
+  .admin-header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
   }
-  
+
+  .header-nav {
+    gap: 15px;
+  }
+
   .admin-tabs {
     flex-wrap: wrap;
   }
-  
+
   .stats-grid {
     grid-template-columns: 1fr;
   }
-  
-  .users-table, .bookings-table {
+
+  .users-table,
+  .bookings-table,
+  .cars-table {
     overflow-x: auto;
   }
-  
-  .cars-grid {
-    grid-template-columns: 1fr;
+
+  .overview-tab,
+  .users-tab,
+  .bookings-tab,
+  .cars-tab {
+    padding: 15px;
   }
+}
+
+/* Force dark theme override - most aggressive approach */
+body:has(.admin-dashboard-container) {
+  background: #1a1a1a !important;
+  overflow: hidden !important;
+}
+
+.App:has(.admin-dashboard-container) {
+  background: #1a1a1a !important;
+}
+
+/* Ensure admin dashboard is always visible */
+.admin-dashboard-container {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Override any potential hiding styles */
+.admin-dashboard-container,
+.admin-dashboard-container .admin-header,
+.admin-dashboard-container .admin-content {
+  display: block !important;
+  visibility: visible !important;
 }

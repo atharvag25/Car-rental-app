@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import MyBookings from './pages/MyBookings';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminTest from './pages/AdminTest';
+import AdminTest2 from './pages/AdminTest2';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -34,6 +35,7 @@ function App() {
               </ProtectedRoute>
             } />
             <Route path="/admin-test" element={<AdminTest />} />
+            <Route path="/admin-test2" element={<AdminTest2 />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
