@@ -25,6 +25,8 @@ router.post('/register', [
 
     const user = new User({ name, email, password, role: role || 'customer' });
     await user.save();
+    
+    console.log('User created successfully:', { id: user._id, email: user.email, role: user.role });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
