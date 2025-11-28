@@ -1,0 +1,10 @@
+{
+  "env": {
+    "REACT_APP_API_URL": "https://car-rental-api-coah.onrender.com/api"
+  },
+  "build": {
+    "env": {
+      "REACT_APP_API_URL": "https://car-rental-api-coah.onrender.com/api"
+    }
+  }
+}
