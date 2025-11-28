@@ -41,13 +41,35 @@ const Register = () => {
     try {
       const { confirmPassword, ...registerData } = formData;
       console.log('Attempting registration to:', `${API_URL}/auth/register`);
-      const response = await axios.post(`${API_URL}/auth/register`, registerData);
+      console.log('API_URL:', API_URL);
+      
+      const response = await axios.post(`${API_URL}/auth/register`, registerData, {
+        timeout: 30000, // 30 second timeout for cold starts
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Registration successful:', response.data);
       login(response.data.user, response.data.token);
       navigate('/');
     } catch (err) {
       console.error('Registration error:', err);
       console.error('Error response:', err.response);
-      const errorMessage = err.response?.data?.message || err.message || 'Registration failed';
+      console.error('Error message:', err.message);
+      
+      let errorMessage = 'Registration failed';
+      
+      if (err.code === 'ECONNABORTED') {
+        errorMessage = 'Request timeout - backend may be starting up. Please try again in a moment.';
+      } else if (err.message === 'Network Error') {
+        errorMessage = 'Cannot connect to server. Please check if backend is running.';
+      } else if (err.response) {
+        errorMessage = err.response.data?.message || `Server error: ${err.response.status}`;
+      } else {
+        errorMessage = err.message || 'Registration failed';
+      }
+      
       setError(errorMessage);
     } finally {
       setLoading(false);
