@@ -184,7 +184,7 @@ const seedCars = async () => {
 
     // Insert new cars
     const insertedCars = await Car.insertMany(cars);
-    console.log(`\n✅ Successfully added ${insertedCars.length} cars to the database\n`);
+    console.log(`\n Successfully added ${insertedCars.length} cars to the database\n`);
 
     // Display summary
     const categories = ['sedan', 'suv', 'sports', 'hatchback'];
@@ -194,10 +194,10 @@ const seedCars = async () => {
       console.log(`  - ${category.toUpperCase()}: ${count} cars`);
     }
 
-    console.log('\n🎉 Database seeding completed successfully!\n');
+    console.log('\n Database seeding completed successfully!\n');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding database:', error.message);
+    console.error(' Error seeding database:', error.message);
     process.exit(1);
   }
 };
