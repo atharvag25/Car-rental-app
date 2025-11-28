@@ -40,11 +40,15 @@ const Register = () => {
 
     try {
       const { confirmPassword, ...registerData } = formData;
+      console.log('Attempting registration to:', `${API_URL}/auth/register`);
       const response = await axios.post(`${API_URL}/auth/register`, registerData);
       login(response.data.user, response.data.token);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      console.error('Registration error:', err);
+      console.error('Error response:', err.response);
+      const errorMessage = err.response?.data?.message || err.message || 'Registration failed';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

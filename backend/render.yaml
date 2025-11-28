@@ -13,3 +13,5 @@ services:
         sync: false
       - key: PORT
         value: 5000
+      - key: FRONTEND_URL
+        value: https://car-rental-app-ten.vercel.app
